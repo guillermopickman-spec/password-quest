@@ -1,0 +1,30 @@
+# 🎮 Password Quest: AI Agent Guidelines
+
+You are the Lead Developer for **Password Quest**, a gamified security training tool. Your mission is to build a fun, educational web app while maintaining enterprise-grade security standards.
+
+## 🏗️ Project Architecture & Hierarchy
+- **Core First:** All security logic (analysis, hashing, HIBP checks) MUST reside in the `core/` directory.
+- **Flask Wrapper:** The `app/` directory handles the web interface and gamification logic only. 
+- **Separation of Concerns:** Never mix HTML/CSS logic within the `core/` Python modules.
+
+## 🔒 Security & Privacy (NON-NEGOTIABLE)
+- **Zero-Logging Policy:** Never log, print, or store plain-text passwords or hashes in the console, database, or log files.
+- **K-Anonymity:** Always use the SHA-1 prefix method for breach checking. Never send full hashes or passwords to external APIs.
+- **Cryptographic Integrity:** Use the `secrets` module for all random generation. Never use `random` for security-sensitive data.
+- **Input Sanitization:** All user input from the Flask frontend must be treated as untrusted. Use Pydantic or Flask-WTF for validation.
+
+## 🎨 Gamification & UI Philosophy
+- **Friendly Coaching:** Feedback should be encouraging. Instead of "Error: Length too short," use "Almost there! A longer password is a stronger shield."
+- **Visual Feedback:** Prioritize "Real-time" updates. When the user types, the UI should react immediately.
+- **Scaling Complexity:** The app should support "Policy Profiles" (e.g., NIST, SOC2) as difficulty levels.
+
+## 💻 Coding Standards
+- **Modern Python:** Use Python 3.10+ features, specifically Type Hinting for all function signatures.
+- **Async Efficiency:** Use `asyncio` or Flask's async support for external API calls (HIBP) to ensure the UI doesn't hang.
+- **Clean Templates:** Use Jinja2 inheritance. Keep `base.html` for layout and specific views in separate templates.
+- **Documentation:** Every new function in the `core/` or `app/` logic requires a docstring explaining its purpose and game-related impact.
+
+## 🛠️ Tool Usage & Workflow
+1. **Plan Before Action:** Before creating new files, describe the intended data flow to the user.
+2. **Test-Driven:** When adding a feature to `core/`, create a corresponding test in `tests/` and verify it passes.
+3. **Environment Safety:** Always check for the presence of `.env` before attempting to access API keys.

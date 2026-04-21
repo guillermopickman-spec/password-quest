@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Leaderboard - Password Quest{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    
+    <!-- Header -->
+    <div class="text-center mb-12">
+        <h1 class="text-4xl font-bold mb-4">
+            <span class="bg-gradient-to-r from-quest-success to-quest-accent bg-clip-text text-transparent">
+                Hall of Fame
+            </span>
+        </h1>
+        <p class="text-gray-400 text-lg">
+            The legendary password masters of our realm.
+        </p>
+    </div>
+
+    <!-- Leaderboard Table -->
+    <div class="bg-quest-card rounded-2xl border border-gray-700 overflow-hidden">
+        <div class="p-6 border-b border-gray-700">
+            <h2 class="text-xl font-bold text-white">Top Shield Forgers</h2>
+        </div>
+        
+        <div class="p-12 text-center text-gray-500">
+            <svg class="w-16 h-16 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+            </svg>
+            <p class="text-lg">Leaderboard feature coming soon!</p>
+            <p class="text-sm mt-2">Complete challenges to earn your place among the legends.</p>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

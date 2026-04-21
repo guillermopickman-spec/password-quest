@@ -1,0 +1,3 @@
+"""
+Password Quest - Test Suite
+"""

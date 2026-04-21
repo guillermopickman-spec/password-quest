@@ -1,0 +1,400 @@
+
+{% extends "base.html" %}
+
+{% block title %}Password Quest - Train Your Shield{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    
+    <!-- Hero Section -->
+    <div class="text-center mb-12">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">
+            <span class="bg-gradient-to-r from-quest-accent via-quest-purple to-quest-success bg-clip-text text-transparent">
+                Forge Your Digital Shield
+            </span>
+        </h1>
+        <p class="text-gray-400 text-lg max-w-2xl mx-auto">
+            Master the art of password security. Enter your password below to see how strong your shield is!
+        </p>
+    </div>
+
+    <!-- Challenge Box -->
+    <div class="bg-quest-card rounded-2xl border border-gray-700 p-8 shadow-2xl">
+        
+        <!-- Password Input Section -->
+        <div class="relative mb-8">
+            <label class="block text-quest-accent text-sm font-semibold mb-2 uppercase tracking-wide">
+                Enter Your Shield Code
+            </label>
+            <div class="relative">
+                <input 
+                    type="text" 
+                    id="password-input"
+                    name="password"
+                    placeholder="Type a password to analyze..."
+                    class="w-full bg-gray-900 border-2 border-gray-700 rounded-xl px-6 py-4 text-xl text-white placeholder-gray-600 focus:border-quest-accent focus:outline-none transition-all"
+                    autocomplete="off"
+                    spellcheck="false"
+                >
+                <!-- Visibility Toggle -->
+                <button 
+                    id="toggle-visibility"
+                    class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition"
+                    type="button"
+                >
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Analysis Results Container -->
+        <div id="analysis-results" class="space-y-6">
+            
+            <!-- Initial State -->
+            <div class="text-center py-12 text-gray-500">
+                <svg class="w-16 h-16 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                </svg>
+                <p class="text-lg">Type a password above to begin your quest...</p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Challenges CTA Section -->
+    <div class="mt-8 bg-gradient-to-r from-quest-purple/20 to-quest-accent/20 border border-quest-purple/30 rounded-2xl p-6">
+        <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center space-x-4">
+                <div class="w-16 h-16 bg-quest-purple/30 rounded-xl flex items-center justify-center">
+                    <span class="text-3xl">🎯</span>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-white">Ready for a Challenge?</h3>
+                    <p class="text-gray-400 text-sm mt-1">Test your skills with real-world password security scenarios.</p>
+                    <div class="flex items-center space-x-4 mt-2 text-sm">
+                        <span class="text-quest-accent"><span id="cta-completed">0</span>/3 Completed</span>
+                        <span class="text-quest-success"><span id="cta-badges">0</span> Badges Earned</span>
+                    </div>
+                </div>
+            </div>
+            <a href="{{ url_for("main.challenges") }}" class="bg-quest-accent hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-xl transition transform hover:scale-105 flex items-center space-x-2">
+                <span>Start Challenges</span>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                </svg>
+            </a>
+        </div>
+    </div>
+
+    <!-- Quick Tips -->
+    <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-quest-card border border-gray-700 rounded-xl p-4 flex items-start space-x-3">
+            <div class="w-8 h-8 bg-quest-success/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5 text-quest-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+            </div>
+            <div>
+                <h3 class="font-semibold text-white text-sm">Length Matters</h3>
+                <p class="text-gray-400 text-xs mt-1">Aim for 16+ characters. Longer passwords are exponentially harder to crack.</p>
+            </div>
+        </div>
+        
+        <div class="bg-quest-card border border-gray-700 rounded-xl p-4 flex items-start space-x-3">
+            <div class="w-8 h-8 bg-quest-purple/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5 text-quest-purple" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
+                </svg>
+            </div>
+            <div>
+                <h3 class="font-semibold text-white text-sm">Mix It Up</h3>
+                <p class="text-gray-400 text-xs mt-1">Combine uppercase, lowercase, numbers, and symbols for variety.</p>
+            </div>
+        </div>
+        
+        <div class="bg-quest-card border border-gray-700 rounded-xl p-4 flex items-start space-x-3">
+            <div class="w-8 h-8 bg-quest-accent/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5 text-quest-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.131A8 8 0 008 8m0 0a8 8 0 008 8m0 0a8 8 0 008-8m0 0a8 8 0 00-8-8"></path>
+                </svg>
+            </div>
+            <div>
+                <h3 class="font-semibold text-white text-sm">Use Passphrases</h3>
+                <p class="text-gray-400 text-xs mt-1">4+ random words are often stronger and easier to remember than complex passwords.</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Password analysis with debouncing
+    let debounceTimer;
+    const passwordInput = document.getElementById("password-input");
+    const resultsContainer = document.getElementById("analysis-results");
+    const toggleBtn = document.getElementById("toggle-visibility");
+    
+    // Toggle password visibility
+    toggleBtn.addEventListener("click", () => {
+        const type = passwordInput.type === "password" ? "text" : "password";
+        passwordInput.type = type;
+    });
+    
+    // Convert input to password type initially
+    passwordInput.type = "password";
+    
+    // Debounced analysis function
+    passwordInput.addEventListener("input", (e) => {
+        clearTimeout(debounceTimer);
+        const password = e.target.value;
+        
+        if (!password) {
+            resultsContainer.innerHTML = `
+                <div class="text-center py-12 text-gray-500">
+                    <svg class="w-16 h-16 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                    </svg>
+                    <p class="text-lg">Type a password above to begin your quest...</p>
+                </div>
+            `;
+            return;
+        }
+        
+        // Show loading state
+        resultsContainer.innerHTML = `
+            <div class="text-center py-8">
+                <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-quest-accent border-t-transparent"></div>
+                <p class="text-gray-400 mt-2">Analyzing your shield...</p>
+            </div>
+        `;
+        
+        // Debounce API call
+        debounceTimer = setTimeout(() => analyzePassword(password), 200);
+    });
+    
+    async function analyzePassword(password) {
+        try {
+            const response = await fetch("/api/analyze", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ password }),
+            });
+            
+            if (!response.ok) {
+                throw new Error("Analysis failed");
+            }
+            
+            const data = await response.json();
+            renderResults(data);
+            
+        } catch (error) {
+            resultsContainer.innerHTML = `
+                <div class="bg-quest-danger/10 border border-quest-danger/30 rounded-xl p-4 text-center">
+                    <p class="text-quest-danger">⚠️ Analysis temporarily unavailable. Please try again.</p>
+                </div>
+            `;
+        }
+    }
+    
+    function renderResults(data) {
+        const strengthColors = ["strength-0", "strength-1", "strength-2", "strength-3", "strength-4"];
+        const strengthEmojis = ["🔴", "🟠", "🟡", "🟢", "🟢"];
+        const strengthPercent = (data.score / 4) * 100;
+        
+        // Generate feedback HTML
+        let feedbackHtml = "";
+        if (data.feedback && data.feedback.length > 0) {
+            feedbackHtml = `
+                <div class="bg-gray-900/50 rounded-xl p-4">
+                    <h4 class="text-quest-accent font-semibold mb-3 flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Coach Tips
+                    </h4>
+                    <ul class="space-y-2">
+                        ${data.feedback.map(item => `
+                            <li class="flex items-start text-sm text-gray-300 group relative" x-data="{ tooltip: false }" @mouseover="tooltip = true" @mouseleave="tooltip = false">
+                                <span class="text-quest-accent mr-2">→</span>
+                                <span>${item.tip}</span>
+                                <template x-if="item.explainer">
+                                    <span x-show="tooltip" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-90" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-90" class="absolute z-10 p-2 text-xs text-white bg-gray-800 rounded-lg shadow-lg -mt-8 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                        ${item.explainer}
+                                    </span>
+                                </template>
+                            </li>
+                        `).join("")}
+                    </ul>
+                </div>
+            `;
+        }
+        
+        // Breach warning HTML
+        let breachHtml = "";
+        if (data.is_breached) {
+            breachHtml = `
+                <div class="hacker-alert bg-quest-danger/20 border-2 border-quest-danger rounded-xl p-4 glow-red">
+                    <div class="flex items-center space-x-3">
+                        <svg class="w-8 h-8 text-quest-danger" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                        </svg>
+                        <div>
+                            <h4 class="text-quest-danger font-bold text-lg">🚨 HACKER ALERT!</h4>
+                            <p class="text-gray-300">This password has appeared in <strong>${data.breach_count?.toLocaleString() || "known"} data breaches</strong>!</p>
+                            <p class="text-quest-danger text-sm mt-1">NEVER use this password - it's compromised!</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        } else if (data.breach_count === 0) {
+            breachHtml = `
+                <div class="bg-quest-success/10 border border-quest-success/30 rounded-xl p-3 flex items-center space-x-3">
+                    <svg class="w-6 h-6 text-quest-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span class="text-quest-success font-medium">✅ Not found in known breaches</span>
+                </div>
+            `;
+        }
+        
+        // Warning HTML
+        let warningHtml = "";
+        if (data.warning) {
+            warningHtml = `
+                <div class="bg-quest-warning/10 border border-quest-warning/30 rounded-xl p-3 flex items-center space-x-2">
+                    <svg class="w-5 h-5 text-quest-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span class="text-quest-warning">${data.warning}</span>
+                </div>
+            `;
+        }
+        
+        resultsContainer.innerHTML = `
+            <!-- Strength Score Card -->
+            <div class="bg-gray-900/50 rounded-xl p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center space-x-3">
+                        <span class="text-3xl">${strengthEmojis[data.score]}</span>
+                        <div>
+                            <h3 class="text-2xl font-bold text-white">${data.strength_label}</h3>
+                            <p class="text-gray-400 text-sm">Score: ${data.score}/4</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-quest-accent text-2xl font-bold">${data.entropy}<span class="text-sm text-gray-400 ml-1">bits</span></p>
+                        <p class="text-gray-400 text-xs">Entropy</p>
+                    </div>
+                </div>
+                
+                <!-- Visual Strength Meter -->
+                <div class="relative h-4 bg-gray-800 rounded-full overflow-hidden">
+                    <div class="absolute inset-0 ${strengthColors[data.score]} transition-all duration-500" style="width: ${Math.max(strengthPercent, 5)}%"></div>
+                </div>
+                <div class="flex justify-between text-xs text-gray-500 mt-1">
+                    <span>Weak</span>
+                    <span>Fair</span>
+                    <span>Good</span>
+                    <span>Strong</span>
+                </div>
+            </div>
+            
+            <!-- Crack Time & Breach Status -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-gray-900/50 rounded-xl p-4">
+                    <h4 class="text-gray-400 text-sm mb-1">Estimated Crack Time</h4>
+                    <p class="text-xl font-mono text-white">${data.crack_time_display}</p>
+                </div>
+                <div class="bg-gray-900/50 rounded-xl p-4">
+                    ${breachHtml || "<p class=\"text-gray-400\">Breach check pending...</p>"}
+                </div>
+            </div>
+            
+            ${warningHtml}
+            ${feedbackHtml}
+        `;
+        
+        // Show XP notifications if we have progress data
+        if (data.progress) {
+            showXPNotification(data.progress, data.progress.unlocked_badges);
+            
+            // Update the progress bar in the header
+            if (data.progress.level_progress) {
+                const xpPercent = (data.progress.level_progress.current / data.progress.level_progress.required) * 100;
+                document.getElementById("xp-bar").style.width = `${xpPercent}%`;
+            }
+        }
+    }
+    
+    function showXPNotification(xpData, badges) {
+        // Create notification container if it doesn't exist
+        let notifContainer = document.getElementById("xp-notifications");
+        if (!notifContainer) {
+            notifContainer = document.createElement("div");
+            notifContainer.id = "xp-notifications";
+            notifContainer.className = "fixed bottom-4 right-4 z-50 space-y-2";
+            document.body.appendChild(notifContainer);
+        }
+        
+        // Show XP gained notification
+        if (xpData && xpData.xp_awarded > 0) {
+            const notif = document.createElement("div");
+            notif.className = "bg-quest-success/90 backdrop-blur text-white px-4 py-3 rounded-lg shadow-lg transform translate-x-full transition-transform duration-300 flex items-center space-x-2";
+            notif.innerHTML = `
+                <span class="text-2xl">✨</span>
+                <div>
+                    <p class="font-bold">+${xpData.xp_awarded} XP</p>
+                    <p class="text-xs text-white/80">Level ${xpData.level} • ${xpData.total_xp} total XP</p>
+                </div>
+            `;
+            notifContainer.appendChild(notif);
+            
+            // Animate in
+            setTimeout(() => notif.classList.remove("translate-x-full"), 100);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notif.classList.add("translate-x-full");
+                setTimeout(() => notif.remove(), 300);
+            }, 3000);
+        }
+        
+        // Show badge unlock notifications
+        if (badges && badges.length > 0) {
+            badges.forEach((badge, index) => {
+                setTimeout(() => {
+                    const badgeNotif = document.createElement("div");
+                    badgeNotif.className = "bg-quest-purple/90 backdrop-blur text-white px-4 py-3 rounded-lg shadow-lg transform translate-x-full transition-transform duration-300 flex items-center space-x-2";
+                    badgeNotif.innerHTML = `
+                        <span class="text-2xl">${badge.icon}</span>
+                        <div>
+                            <p class="font-bold">Badge Unlocked!</p>
+                            <p class="text-sm">${badge.description}</p>
+                            ${badge.xp_bonus > 0 ? `<p class="text-xs text-white/80">+${badge.xp_bonus} XP bonus</p>` : ""}
+                        </div>
+                    `;
+                    notifContainer.appendChild(badgeNotif);
+                    
+                    setTimeout(() => badgeNotif.classList.remove("translate-x-full"), 100);
+                    setTimeout(() => {
+                        badgeNotif.classList.add("translate-x-full");
+                        setTimeout(() => badgeNotif.remove(), 300);
+                    }, 4000);
+                }, index * 500);
+            });
+        }
+    }
+    
+    function updateXP(score, isStrong) {
+        // This is now handled by the API response in renderResults
+        // Kept for backwards compatibility
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,340 @@
+{% extends "base.html" %}
+
+{% block title %}{{ challenge.title }} - Password Quest{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    
+    <!-- Back Navigation -->
+    <a href="{{ url_for('main.challenges') }}" class="inline-flex items-center text-gray-400 hover:text-quest-accent transition mb-6">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+        Back to Challenges
+    </a>
+
+    <!-- Challenge Header -->
+    <div class="bg-quest-card rounded-2xl border border-gray-700 p-8 mb-6">
+        <div class="flex items-start justify-between mb-4">
+            <div>
+                <div class="flex items-center space-x-3 mb-2">
+                    <span class="px-3 py-1 bg-quest-purple/20 text-quest-purple rounded-full text-sm font-semibold">
+                        Level {{ challenge.level }}
+                    </span>
+                    <span class="px-3 py-1 bg-gray-700 text-gray-300 rounded-full text-sm">
+                        {{ challenge.difficulty.name }}
+                    </span>
+                </div>
+                <h1 class="text-3xl font-bold text-white">{{ challenge.title }}</h1>
+            </div>
+            {% if progress.completed %}
+            <div class="flex items-center space-x-2 bg-quest-success/20 text-quest-success px-4 py-2 rounded-lg">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span class="font-semibold">Completed!</span>
+            </div>
+            {% endif %}
+        </div>
+        
+        <p class="text-xl text-quest-accent font-medium">{{ challenge.scenario }}</p>
+    </div>
+
+    <!-- Progress Bar (if attempted) -->
+    {% if progress and progress.attempts is defined and progress.attempts > 0 %}
+    <div class="bg-quest-card rounded-xl border border-gray-700 p-4 mb-6">
+        <div class="flex items-center justify-between mb-2">
+            <span class="text-sm text-gray-400">Best Score</span>
+            <span class="text-lg font-bold text-white">{{ progress.best_score }}/4</span>
+        </div>
+        <div class="w-full h-3 bg-gray-700 rounded-full overflow-hidden">
+            <div class="h-full bg-gradient-to-r from-quest-accent to-quest-success transition-all duration-500 w-0" 
+                 data-progress="{{ progress.best_score }}" 
+                 id="progress-bar-fill"></div>
+        </div>
+        <p class="text-xs text-gray-500 mt-2">{{ progress.attempts }} attempt(s) made</p>
+    </div>
+    {% endif %}
+
+    <!-- Scenario Details -->
+    <div class="bg-quest-card rounded-2xl border border-gray-700 p-8 mb-6">
+        <h2 class="text-xl font-bold text-white mb-4 flex items-center">
+            <svg class="w-6 h-6 mr-2 text-quest-purple" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            The Situation
+        </h2>
+        <div class="prose prose-invert max-w-none text-gray-300">
+            {{ challenge.scenario_details | safe }}
+        </div>
+    </div>
+
+    <!-- Weak Password Analysis -->
+    <div class="bg-quest-card rounded-2xl border border-red-900/50 p-8 mb-6">
+        <h2 class="text-xl font-bold text-red-400 mb-4 flex items-center">
+            <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+            </svg>
+            What's Wrong with This Password?
+        </h2>
+        <div class="bg-gray-900/50 rounded-lg p-4 mb-4 font-mono text-red-300 text-lg text-center">
+            {{ challenge.weak_password }}
+        </div>
+        <div class="text-gray-400 text-sm whitespace-pre-line">{{ challenge.weak_password_explanation }}</div>
+    </div>
+
+    <!-- Password Input Section -->
+    <div class="bg-quest-card rounded-2xl border border-quest-accent/50 p-8 mb-6">
+        <h2 class="text-xl font-bold text-white mb-6 flex items-center">
+            <svg class="w-6 h-6 mr-2 text-quest-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            Create a Better Password
+        </h2>
+        
+        <div class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-400 mb-2">
+                    Enter a stronger password (minimum score: {{ challenge.min_score_to_pass }}/4)
+                </label>
+                <input type="text" 
+                       id="challenge-password" 
+                       class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-quest-accent focus:ring-1 focus:ring-quest-accent transition"
+                       placeholder="Type your improved password here..."
+                       autocomplete="off">
+            </div>
+            
+            <button onclick="submitChallenge()" 
+                    id="submit-btn"
+                    class="w-full bg-gradient-to-r from-quest-accent to-quest-purple hover:from-blue-600 hover:to-purple-600 text-white font-bold py-3 px-6 rounded-lg transition transform hover:scale-[1.02] active:scale-[0.98]">
+                Test My Password
+            </button>
+        </div>
+
+        <!-- Hints Section -->
+        <div class="mt-6 pt-6 border-t border-gray-700">
+            <h3 class="text-sm font-semibold text-gray-400 mb-3">💡 Hints</h3>
+            <div class="space-y-2">
+                {% for hint in challenge.hints %}
+                <div class="flex items-start space-x-3 text-sm text-gray-500" id="hint-{{ loop.index }}">
+                    <span class="flex-shrink-0 w-6 h-6 bg-gray-800 rounded-full flex items-center justify-center text-xs font-bold">
+                        {{ loop.index }}
+                    </span>
+                    <span class="opacity-50 blur-sm hover:opacity-100 hover:blur-0 transition cursor-help" title="Hover to reveal">
+                        {{ hint.text }}
+                    </span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Section (Hidden by default) -->
+    <div id="results-section" class="hidden bg-quest-card rounded-2xl border border-gray-700 p-8 mb-6">
+        <div id="success-result" class="hidden">
+            <div class="text-center mb-6">
+                <div class="w-20 h-20 bg-quest-success/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-10 h-10 text-quest-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                </div>
+                <h2 class="text-2xl font-bold text-quest-success mb-2">Challenge Complete! 🎉</h2>
+                <p class="text-gray-400" id="success-message"></p>
+            </div>
+            
+            <div class="bg-quest-success/10 border border-quest-success/30 rounded-lg p-4 mb-4">
+                <h3 class="font-semibold text-quest-success mb-2">Lesson Learned</h3>
+                <p class="text-gray-300 text-sm" id="lesson-learned"></p>
+            </div>
+
+            <div class="flex space-x-4">
+                <a href="{{ url_for('main.challenges') }}" class="flex-1 bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-6 rounded-lg text-center transition">
+                    All Challenges
+                </a>
+                <button onclick="resetChallenge()" class="flex-1 bg-quest-accent hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg transition">
+                    Try Again
+                </button>
+            </div>
+            
+            <!-- Next Challenge Button (shown dynamically) -->
+            <div id="next-challenge-container" class="mt-4 hidden">
+                <a id="next-challenge-link" href="#" class="block w-full bg-gradient-to-r from-quest-success to-quest-accent hover:from-green-600 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-lg text-center transition transform hover:scale-[1.02] flex items-center justify-center space-x-2">
+                    <span>Next Challenge</span>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+
+        <div id="failure-result" class="hidden">
+            <div class="text-center mb-6">
+                <div class="w-20 h-20 bg-quest-warning/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-10 h-10 text-quest-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                    </svg>
+                </div>
+                <h2 class="text-2xl font-bold text-quest-warning mb-2">Not Quite Strong Enough</h2>
+                <p class="text-gray-400" id="failure-message"></p>
+            </div>
+
+            <div class="bg-quest-warning/10 border border-quest-warning/30 rounded-lg p-4 mb-4">
+                <h3 class="font-semibold text-quest-warning mb-2">💪 Keep Trying!</h3>
+                <ul class="text-gray-300 text-sm space-y-1" id="improvement-tips"></ul>
+            </div>
+
+            <button onclick="resetChallenge()" class="w-full bg-quest-accent hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg transition">
+                Try Another Password
+            </button>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Template variables from server (injected by Jinja2)
+const challengeId = '{{ challenge.id }}';
+const minScore = parseInt("{{ challenge.min_score_to_pass | default(3) | int }}");
+
+// Initialize progress bar width based on data attribute
+(function initProgressBar() {
+    const progressBarFill = document.getElementById('progress-bar-fill');
+    if (progressBarFill) {
+        const progress = parseFloat(progressBarFill.dataset.progress);
+        const width = progress ? (progress / 4 * 100) : 0;
+        progressBarFill.style.width = width + '%';
+    }
+})();
+
+async function submitChallenge() {
+    const password = document.getElementById('challenge-password').value;
+    const submitBtn = document.getElementById('submit-btn');
+    const resultsSection = document.getElementById('results-section');
+    
+    if (!password) {
+        alert('Please enter a password first!');
+        return;
+    }
+    
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Testing...';
+    
+    try {
+        const response = await fetch(`/api/challenges/${challengeId}/attempt`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password })
+        });
+        
+        const data = await response.json();
+        
+        resultsSection.classList.remove('hidden');
+        
+        if (data.validation.passed) {
+            // Success!
+            document.getElementById('success-result').classList.remove('hidden');
+            document.getElementById('failure-result').classList.add('hidden');
+            document.getElementById('success-message').textContent = data.validation.success_message;
+            document.getElementById('lesson-learned').textContent = data.validation.lesson_learned;
+            
+            // Update XP display if available
+            if (data.progress) {
+                updateProgressBar(data.progress.level, data.progress.xp);
+            }
+        } else {
+            // Need to try again
+            document.getElementById('success-result').classList.add('hidden');
+            document.getElementById('failure-result').classList.remove('hidden');
+            document.getElementById('failure-message').textContent = data.validation.feedback;
+            
+            const tipsList = document.getElementById('improvement-tips');
+            tipsList.innerHTML = '';
+            data.attempt.feedback.forEach(tip => {
+                const li = document.createElement('li');
+                li.textContent = '• ' + tip;
+                tipsList.appendChild(li);
+            });
+        }
+    } catch (error) {
+        console.error('Challenge submission failed:', error);
+        alert('Something went wrong. Please try again.');
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Test My Password';
+    }
+}
+
+function resetChallenge() {
+    document.getElementById('challenge-password').value = '';
+    document.getElementById('results-section').classList.add('hidden');
+    document.getElementById('success-result').classList.add('hidden');
+    document.getElementById('failure-result').classList.add('hidden');
+    document.getElementById('challenge-password').focus();
+}
+
+function updateProgressBar(level, xp) {
+    // Update level display
+    const levelEl = document.getElementById('user-level');
+    if (levelEl) levelEl.textContent = level;
+    
+    // Handle different XP data structures
+    let currentXP = 0;
+    let requiredXP = 1000;
+    
+    if (xp) {
+        // New structure from API
+        if (xp.current_level !== undefined) {
+            currentXP = xp.current_level;
+            requiredXP = xp.required_for_next || 1000;
+        } 
+        // Old structure fallback
+        else if (xp.total !== undefined) {
+            // Calculate from total XP
+            const total = xp.total;
+            // Simple level calculation matching backend
+            if (total < 1000) {
+                currentXP = total;
+                requiredXP = 1000;
+            } else if (total < 2500) {
+                currentXP = total - 1000;
+                requiredXP = 1500;
+            } else if (total < 5000) {
+                currentXP = total - 2500;
+                requiredXP = 2500;
+            } else if (total < 10000) {
+                currentXP = total - 5000;
+                requiredXP = 5000;
+            } else {
+                currentXP = (total - 10000) % 5000;
+                requiredXP = 5000;
+            }
+        }
+    }
+    
+    // Update XP display
+    const xpEl = document.getElementById('user-xp');
+    if (xpEl) xpEl.textContent = `${currentXP}/${requiredXP}`;
+    
+    // Update XP bar
+    const xpBar = document.getElementById('xp-bar');
+    if (xpBar) {
+        const percentage = (currentXP / requiredXP) * 100;
+        xpBar.style.width = percentage + '%';
+    }
+    
+    // Also refresh the global progress to ensure consistency
+    if (typeof updateUserProgress === 'function') {
+        updateUserProgress();
+    }
+}
+
+// Allow Enter key to submit
+document.getElementById('challenge-password').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        submitChallenge();
+    }
+});
+</script>
+{% endblock %}
